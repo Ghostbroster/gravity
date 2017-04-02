@@ -12,6 +12,9 @@ public abstract class AbstractPendulum {
     private double stringLength, pointMass;
     protected double theta0; 
     protected double g; 
+    
+    /** gravitational constant */
+    public static final double EARTH_GRAVITY = 9.80665;
 
     /**
      * Creates a new Pendulum instance using
@@ -21,15 +24,21 @@ public abstract class AbstractPendulum {
      * inG: gravitational field value to use
      */
     public AbstractPendulum (double inLength, double inMass, double inTheta0, double inG) {
-	if (validStringLength (inLength)) stringLength = inLength;
-	else throw new IllegalArgumentException ("invalid string length: " + inLength);
-	if (validPointMass(inMass)) pointMass = inMass;
-	else throw new IllegalArgumentException ("invalid point mass: " + inMass);
-	if (validDisplacement (inTheta0)) theta0 = inTheta0;
-	else throw new IllegalArgumentException 
-		 ("invalid angular displacement: " + inTheta0);
-	if (validGC (inG)) g = inG;
-	else throw new IllegalArgumentException ("invalid local gravitational field: " + inG);
+		if (validStringLength (inLength)) stringLength = inLength;
+		else throw new IllegalArgumentException ("invalid string length: " + inLength);
+		if (validPointMass(inMass)) pointMass = inMass;
+		else throw new IllegalArgumentException ("invalid point mass: " + inMass);
+		if (validDisplacement (inTheta0)) theta0 = inTheta0;
+		else throw new IllegalArgumentException 
+			 ("invalid angular displacement: " + inTheta0);
+		if (validGC (inG)) g = inG;
+		else throw new IllegalArgumentException ("invalid local gravitational field: " + inG);
+    }
+    /**
+     * If no gravity is specified, this constructor calls the main constructor and defaults to EARTH_GRAVITY
+     */
+    public AbstractPendulum (double inLength, double inMass, double inTheta0) {
+		this(inLength, inMass, inTheta0, EARTH_GRAVITY);
     }
 
     private boolean validDisplacement (double val) { return (val >= 0); }
