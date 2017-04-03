@@ -12,9 +12,6 @@ public abstract class AbstractPendulum {
     private double stringLength, pointMass;
     protected double theta0; 
     protected double g; 
-    
-    /** gravitational constant */
-    public static final double EARTH_GRAVITY = 9.80665;
 
     /**
      * Creates a new Pendulum instance using
