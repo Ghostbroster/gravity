@@ -23,28 +23,35 @@ public abstract class AbstractPendulum {
      * inTheta0: angular displacement at t=0 (0<=theta0)
      * inG: gravitational field value to use
      */
-    public AbstractPendulum (double inLength, double inMass, double inTheta0, double inG) {
+    public AbstractPendulum (double inLength, double inMass, double inTheta0, GravityModel gModel) {
 		if (validStringLength (inLength)) stringLength = inLength;
 		else throw new IllegalArgumentException ("invalid string length: " + inLength);
 		if (validPointMass(inMass)) pointMass = inMass;
 		else throw new IllegalArgumentException ("invalid point mass: " + inMass);
 		if (validDisplacement (inTheta0)) theta0 = inTheta0;
-		else throw new IllegalArgumentException 
-			 ("invalid angular displacement: " + inTheta0);
-		if (validGC (inG)) g = inG;
-		else throw new IllegalArgumentException ("invalid local gravitational field: " + inG);
+		else throw new IllegalArgumentException ("invalid angular displacement: " + inTheta0);
+		if (validGC (gModel)) g = gModel.getGravitationalField();
+		else throw new IllegalArgumentException ("invalid local gravitational field: " + gModel);
     }
     /**
-     * If no gravity is specified, this constructor calls the main constructor and defaults to EARTH_GRAVITY
+     * If no gravity is specified, this constructor calls the main constructor with a default GravityConstant (earth's gravity)
      */
     public AbstractPendulum (double inLength, double inMass, double inTheta0) {
-		this(inLength, inMass, inTheta0, EARTH_GRAVITY);
+		this(inLength, inMass, inTheta0, new GravityConstant());
+    }
+    
+    /**
+     * Change gravity model
+     */
+    public void changeGravity(GravityModel gModel) {
+    	if (validGC (gModel)) g = gModel.getGravitationalField();
+		else throw new IllegalArgumentException ("invalid local gravitational field: " + gModel);
     }
 
     private boolean validDisplacement (double val) { return (val >= 0); }
     private boolean validPointMass (double val) { return (val > 0); }
     private boolean validStringLength (double val) { return (val > 0); }
-    private boolean validGC (double val) { return (val >= 0); }
+    private boolean validGC (GravityModel gModel) { return (gModel.getGravitationalField() >= 0); }
 
     public double getMaxAngularDisplacement () { return theta0; }
 

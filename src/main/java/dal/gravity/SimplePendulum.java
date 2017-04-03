@@ -12,12 +12,31 @@ public class SimplePendulum extends AbstractPendulum {
      * inLength: the string length (>0)
      * inMass: the point mass (>0)
      * inTheta0: angular displacement at t=0 (0<=theta0<=pi/6)
+     * Uses a default GravityModel (Earth's gravity)
      */
     public SimplePendulum (double inLength, double inMass, double inTheta0) {
-	super (inLength, inMass, inTheta0);
-	angularFrequency = Math.sqrt (this.getGravitationalField () / this.getStringLength ());
-	periodOfMotion = 2 * Math.PI 
-	    * Math.sqrt (this.getStringLength () / this.getGravitationalField ());
+    	super (inLength, inMass, inTheta0);
+		init();
+    }
+    
+    /**
+     * Creates a new Pendulum instance using
+     * inLength: the string length (>0)
+     * inMass: the point mass (>0)
+     * inTheta0: angular displacement at t=0 (0<=theta0<=pi/6)
+     * gModel: A Gravity Model
+     */
+    public SimplePendulum (double inLength, double inMass, double inTheta0, GravityModel gModel) {
+    	super (inLength, inMass, inTheta0, gModel);
+    	init();
+    }
+    
+    /**
+     * Calculates some local values
+     */ 
+    private void init() {
+    	angularFrequency = Math.sqrt (this.getGravitationalField () / this.getStringLength ());
+		periodOfMotion = 2 * Math.PI * Math.sqrt(this.getStringLength () / this.getGravitationalField ());
     }
 
     /**
@@ -34,6 +53,6 @@ public class SimplePendulum extends AbstractPendulum {
      * provides the angular displacement of this Pendulum at time t
      */
     public double getTheta (double t) {
-	return this.getMaxAngularDisplacement () * Math.cos (angularFrequency * t);
+    	return this.getMaxAngularDisplacement () * Math.cos (angularFrequency * t);
     }
 }
